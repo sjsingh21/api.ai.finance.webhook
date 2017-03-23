@@ -36,7 +36,7 @@ def webhook():
 
 
 def processRequest(req):
-    if req.get("result").get("action") != "yahooWeatherForecast":
+    if req.get("result").get("action") != "yahooFinance":
         return {}
     baseurl = "https://query.yahooapis.com/v1/public/yql?"
     yql_query = makeYqlQuery(req)
@@ -52,12 +52,12 @@ def processRequest(req):
 def makeYqlQuery(req):
     result = req.get("result")
     parameters = result.get("parameters")
-    city = parameters.get("geo-city")
-    if city is None:
+    symbol = parameters.get("stock")
+    if symbol is None:
         return None
 
-    return "select * from weather.forecast where woeid in (select woeid from geo.places(1) where text='" + city + "')"
-
+    return "select * from from yahoo.finance.quotes where symbol in ("YHOO") (select woeid from geo.places(1) where text='" + city + "')"
+# To be updated with correct data
 
 def makeWebhookResult(data):
     query = data.get('query')
@@ -71,7 +71,7 @@ def makeWebhookResult(data):
     channel = result.get('channel')
     if channel is None:
         return {}
-
+# all these have to be changed with correct result parameters
     item = channel.get('item')
     location = channel.get('location')
     units = channel.get('units')
